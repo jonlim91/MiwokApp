@@ -3,6 +3,7 @@ package com.example.android.miwok;
 import android.content.Context;
 import android.graphics.Color;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -40,7 +41,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
         }
 
         //Get the {@link Word} object located at this position in the list
-        Word word = getItem(position);
+        /**/final Word word = getItem(position);
 
         //Find the TextView in the list_item.xml layout with the ID miwok_text_view
         TextView miwokTranslation = (TextView) listItemView.findViewById(R.id.miwok_text_view);
@@ -72,6 +73,10 @@ public class WordAdapter extends ArrayAdapter<Word> {
         else{
             imageRepresentation.setVisibility(View.GONE);
         }
+
+        //Find the ImageView and set the play button icon
+        ImageView playButton = (ImageView) listItemView.findViewById(R.id.play_button);
+        playButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
 
         // Return the whole list item layout (containing 2 TextViews and an ImageView [TODO])
         // so that it can be shown in the ListView
