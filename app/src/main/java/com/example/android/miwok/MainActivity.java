@@ -15,14 +15,22 @@
  */
 package com.example.android.miwok;
 
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import static android.R.attr.textAppearanceMedium;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,70 @@ public class MainActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
+        //Find the view pager that will allow user to swipe between fragments
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        // Create an adapter that knows which fragment should be shown on each page
+        CategoryAdapter adapter = new CategoryAdapter(MainActivity.this, getSupportFragmentManager());
+
+        // Set the adapter onto the view pager
+        viewPager.setAdapter(adapter);
+
+        /// Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+
+                TextView tabTextView = new TextView(this);
+                tab.setCustomView(tabTextView);
+
+                tabTextView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                tabTextView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                /**/tabTextView.setText(tab.getText());
+                tabTextView.setTextColor(Color.WHITE);
+                tabTextView.setAllCaps(true);
+
+                // First tab is the selected tab, so if i==0 then set BOLD typeface
+                if (i == 0) {
+                    tabTextView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                }
+
+            }
+
+        }
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+
+                TextView text = (TextView) tab.getCustomView();
+
+                text.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                TextView text = (TextView) tab.getCustomView();
+
+                text.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+
+        });
+
+
+        /*
         //Find the view that shows the numbers category
         TextView numbersView = (TextView) findViewById(R.id.numbers);
         numbersView.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +154,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(colorsIntent);
             }
         });
+        */
+
     }
+
+
+
+
 
 }
